@@ -50,19 +50,19 @@
     <div class="container bg-danger mx-auto" id="placeholder">
     </div>
 
-    <script src="js/build/three.js"></script>
+    <script src="js/three/build/three.js"></script>
 
-    <script src="js/controls/OrbitControls.js"></script>
-    <script src="js/loaders/GLTFLoader.js"></script>
+    <script src="js/three/controls/OrbitControls.js"></script>
+    <script src="js/three/loaders/GLTFLoader.js"></script>
 
-    <script src="js/loaders/EquirectangularToCubeGenerator.js"></script>
-    <script src="js/loaders/RGBELoader.js"></script>
+    <script src="js/three/loaders/EquirectangularToCubeGenerator.js"></script>
+    <script src="js/three/loaders/RGBELoader.js"></script>
 
-    <script src="js/pmrem/PMREMGenerator.js"></script>
-    <script src="js/pmrem/PMREMCubeUVPacker.js"></script>
+    <script src="js/three/pmrem/PMREMGenerator.js"></script>
+    <script src="js/three/pmrem/PMREMCubeUVPacker.js"></script>
 
-    <script src="js/WebGL.js"></script>
-    <script src="js/libs/stats.min.js"></script>
+    <script src="js/three/WebGL.js"></script>
+    <script src="js/three/libs/stats.min.js"></script>
 
     <script>
       if ( WEBGL.isWebGLAvailable() === false ) {
@@ -84,7 +84,7 @@
           controls.update();
           scene = new THREE.Scene();
           var loader = new THREE.RGBELoader().setPath( 'js/textures/equirectangular/' );
-          loader.load( 'pedestrian_overpass_2k.hdr', function ( texture ) {
+          loader.load( 'venice_sunset_2k.hdr', function ( texture ) {
               texture.encoding = THREE.RGBEEncoding;
               texture.minFilter = THREE.NearestFilter;
               texture.magFilter = THREE.NearestFilter;
