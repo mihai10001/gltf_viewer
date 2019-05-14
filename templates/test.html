@@ -50,7 +50,7 @@
     <div class="container bg-danger mx-auto" id="placeholder">
     </div>
 
-    <script src="build/three.js"></script>
+    <script src="js/build/three.js"></script>
 
     <script src="js/controls/OrbitControls.js"></script>
     <script src="js/loaders/GLTFLoader.js"></script>
@@ -83,7 +83,7 @@
           controls.target.set( 0, - 0.2, - 0.2 );
           controls.update();
           scene = new THREE.Scene();
-          var loader = new THREE.RGBELoader().setPath( 'textures/equirectangular/' );
+          var loader = new THREE.RGBELoader().setPath( 'js/textures/equirectangular/' );
           loader.load( 'pedestrian_overpass_2k.hdr', function ( texture ) {
               texture.encoding = THREE.RGBEEncoding;
               texture.minFilter = THREE.NearestFilter;
@@ -97,7 +97,7 @@
               pmremCubeUVPacker.update( renderer );
               var envMap = pmremCubeUVPacker.CubeUVRenderTarget.texture;
               // model
-              var loader = new THREE.GLTFLoader().setPath( 'models/gltf/DamagedHelmet/glTF/' );
+              var loader = new THREE.GLTFLoader().setPath( 'js/models/gltf/DamagedHelmet/glTF/' );
               loader.load( 'DamagedHelmet.gltf', function ( gltf ) {
                   gltf.scene.traverse( function ( child ) {
                       if ( child.isMesh ) {
