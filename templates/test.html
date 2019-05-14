@@ -17,27 +17,14 @@
       margin-left: auto;
       margin-right: auto;
       display: block;
-    }
-
-    #info {
-        color: #fff;
-        position: relative;
-        top: 10px;
-        width: 100%;
-        text-align: center;
-        z-index: 100;
-        display:block;
-    }
-    #info a {
-        color: #75ddc1;
-        font-weight: bold;
+      border-radius: 5px;
     }
 
     </style>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Sentiment Analyser</title>
+    <title>glTF loader (viewer)</title>
   </head>
   <body class="bg-dark">
     <div id="info">
@@ -47,7 +34,26 @@
         <a href="https://hdrihaven.com/hdri/?h=pedestrian_overpass" target="_blank" rel="noopener">Pedestrian Overpass</a> by <a href="https://hdrihaven.com/" target="_blank" rel="noopener">HDRI Haven</a>
     </div>
 
-    <div class="container bg-danger mx-auto" id="placeholder">
+    <div class="container bg-danger p-2 rounded position-relative" id="placeholder">
+      <span class="h3">Simple glTF Viewer</span>
+      <div class="h5 text-left position-absolute">Press</div>
+      <div class="h5 text-left position-absolute">Left mouse</div>
+      <div class="h5 text-left position-absolute">Press</div>
+
+    </div>
+
+    <div class="container fixed-bottom bg-danger mx-auto">
+      <form method="POST">
+        <div class="form-group" method = "POST">
+          <label for="this_select">Example select</label>
+          <select class="form-control" id="this_select" name="model_select">
+            {%for model in all_models%} 
+              <option>{{ model }}</option> 
+            {%endfor%}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
     </div>
 
     <script src="js/three/build/three.js"></script>
@@ -73,23 +79,21 @@
       init();
       animate();
       function init() {
-          container = document.getElementById( 'placeholder' );
-          container.width = 700;
-          container.height= 500;
+          container = document.getElementById('placeholder');
+          container.height = window.innerHeight/1.75;
+          container.width = window.innerWidth/3.5;
           document.body.appendChild( container );
-          camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-          camera.position.set( - 1.8, 0.9, 2.7 );
-          controls = new THREE.OrbitControls( camera );
-          controls.target.set( 0, - 0.2, - 0.2 );
-          controls.update();
+
+          camera = new THREE.PerspectiveCamera( 90, (window.innerHeight/1.75) / (window.innerWidth/3.5), 0.1, 200 );
+          camera.position.set( -1.8, 0.9, 0.9 );
           scene = new THREE.Scene();
           var loader = new THREE.RGBELoader().setPath( 'js/textures/equirectangular/' );
-          loader.load( 'venice_sunset_2k.hdr', function ( texture ) {
+          loader.load( 'shanghai_bund_4k.hdr', function ( texture ) {
               texture.encoding = THREE.RGBEEncoding;
               texture.minFilter = THREE.NearestFilter;
               texture.magFilter = THREE.NearestFilter;
               texture.flipY = true;
-              var cubeGenerator = new THREE.EquirectangularToCubeGenerator( texture, { resolution: 1024 } );
+              var cubeGenerator = new THREE.EquirectangularToCubeGenerator( texture, { resolution: 4096 } );
               cubeGenerator.update( renderer );
               var pmremGenerator = new THREE.PMREMGenerator( cubeGenerator.renderTarget.texture );
               pmremGenerator.update( renderer );
@@ -97,8 +101,8 @@
               pmremCubeUVPacker.update( renderer );
               var envMap = pmremCubeUVPacker.CubeUVRenderTarget.texture;
               // model
-              var loader = new THREE.GLTFLoader().setPath( 'js/models/gltf/DamagedHelmet/glTF/' );
-              loader.load( 'DamagedHelmet.gltf', function ( gltf ) {
+              var loader = new THREE.GLTFLoader().setPath( '{{ model_dir_path }}' );
+              loader.load( '{{ model_file_path }}', function ( gltf ) {
                   gltf.scene.traverse( function ( child ) {
                       if ( child.isMesh ) {
                           child.material.envMap = envMap;
@@ -114,17 +118,21 @@
           renderer.setPixelRatio( window.devicePixelRatio );
           renderer.setSize( container.width, container.height );
           renderer.gammaOutput = true;
+
+          controls = new THREE.OrbitControls( camera, renderer.domElement );
+          controls.target.set( 0, - 0.2, - 0.2 );
+          controls.update();
+
           stats = container.appendChild( renderer.domElement );
-          // stats.style =
           container.addEventListener( 'resize', onWindowResize, false );
           // stats
           stats = new Stats();
           container.appendChild( stats.dom );
       }
       function onWindowResize() {
-          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.aspect = (window.innerHeight/1.75) / (window.innerWidth/3.75);
           camera.updateProjectionMatrix();
-          renderer.setSize( window.innerWidth, window.innerHeight );
+          renderer.setSize( window.innerWidth/3.75, window.innerHeight/1.75 );
       }
       //
       function animate() {
