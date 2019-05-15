@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, send_from_directory
 # FLASK SETUP
 app = Flask(__name__, static_url_path='')
 
+
 def models(path):
     all_models = [f for f in listdir(path) if isdir(join(path, f))]
     return all_models
@@ -19,12 +20,10 @@ def maps(path):
 @app.route('/', methods=['GET', 'POST'])
 def home():
 
-    models_path = 'js/models/gltf/'
+    models_path = 'js/models/gltf'
     maps_path = 'js/textures/equirectangular'
     all_models = models(models_path)
-    all_maps =  maps(maps_path)
-
-
+    all_maps = maps(maps_path)
 
     if request.method == 'POST':
         selected_model = request.form.get('model_select')
@@ -34,10 +33,11 @@ def home():
         model_dir_path = models_path + '/' + 'Duck' + '/glTF/'
         model_path = 'Duck' + '.gltf'
 
-    return render_template('test.html', model_dir_path = model_dir_path,
-                                        model_file_path = model_path,
-                                        all_models = all_models,
-                                        all_maps = all_maps)
+    return render_template('test.html',
+                           model_dir_path=model_dir_path,
+                           model_file_path=model_path,
+                           all_models=all_models,
+                           all_maps=all_maps)
 
 
 @app.route('/js/<path:path>')

@@ -27,33 +27,60 @@
     <title>glTF loader (viewer)</title>
   </head>
   <body class="bg-dark">
-    <div id="info">
+
+    <div class="container fixed-top rounded border-bottom border-secondary bg-dark text-right">
+      <div class="h2 mt-2 text-warning">Simple glTF Viewer <i class="fas fa-cube"></i></div>
+      <div class="h3 mb-1 text-secondary">with <i class="fab fa-js-square"></i> and <i class="fab fa-python"></i></div>
+    </div>
+
+<!--     <div id="info">
         <a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - GLTFLoader<br />
         Battle Damaged Sci-fi Helmet by
         <a href="https://sketchfab.com/theblueturtle_" target="_blank" rel="noopener">theblueturtle_</a><br />
         <a href="https://hdrihaven.com/hdri/?h=pedestrian_overpass" target="_blank" rel="noopener">Pedestrian Overpass</a> by <a href="https://hdrihaven.com/" target="_blank" rel="noopener">HDRI Haven</a>
+    </div> -->
+
+    <div class="my-5 text-dark" id="after">empty</div>
+
+    <div class="container mt-4 p-2 rounded position-relative bg-warning" id="placeholder">
+      <div class="h3 p-2 text-center">Interact with the canvas below:</div>
+      <div class="h5 text-left position-absolute">
+        <div>Mouse controls (using the 'OrbitControls.js' module) </div>
+        <div>Left mouse and drag to</div>
+        <div>move</div>
+      </div>
+
+      <div class="h5 position-absolute" style="right: 0">
+        <div>The canvas was built using Three.js/examples</div>
+        <div>The canvas is built with a script that first loads</div>
+        <div>THE MAP AS A TEXTURE (.hdri) and then</div>
+        <div>THE glTF MODEL (.gltf)</div>
+        <div>move</div>
+      </div>
     </div>
 
-    <div class="container bg-danger p-2 rounded position-relative" id="placeholder">
-      <span class="h3">Simple glTF Viewer</span>
-      <div class="h5 text-left position-absolute">Press</div>
-      <div class="h5 text-left position-absolute">Left mouse</div>
-      <div class="h5 text-left position-absolute">Press</div>
+    <div class="container mx-auto my-3 rounded bg-warning">
 
-    </div>
-
-    <div class="container fixed-bottom bg-danger mx-auto">
-      <form method="POST">
-        <div class="form-group" method = "POST">
-          <label for="this_select">Example select</label>
-          <select class="form-control" id="this_select" name="model_select">
-            {%for model in all_models%} 
-              <option>{{ model }}</option> 
-            {%endfor%}
-          </select>
+      <div class="row p-2">
+        <div class="col-lg-5 mx-auto p-2 bg-info rounded">
+          <form method="POST">
+            <div class="form-group text-center" method="POST">
+              <label for="this_select">Select model from the list below</label>
+              <select class="form-control" id="this_select" name="model_select">
+                {% for model in all_models %}
+                  <option>{{ model }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-dark btn-block">Submit</button>
+          </form>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+
+        <div class="col-lg-5 mx-auto my-2 bg-info rounded">
+        </div>
+      </div>
+
+
     </div>
 
     <script src="js/three/build/three.js"></script>
@@ -74,15 +101,21 @@
       if ( WEBGL.isWebGLAvailable() === false ) {
           document.body.appendChild( WEBGL.getWebGLErrorMessage() );
       }
+
+      function insertAfter(newNode, referenceNode) {
+          referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+      }
+
       var container, stats, controls;
       var camera, scene, renderer;
       init();
       animate();
       function init() {
+          nav = document.getElementById('after');
           container = document.getElementById('placeholder');
           container.height = window.innerHeight/1.75;
           container.width = window.innerWidth/3.5;
-          document.body.appendChild( container );
+          insertAfter(container, nav);
 
           camera = new THREE.PerspectiveCamera( 90, (window.innerHeight/1.75) / (window.innerWidth/3.5), 0.1, 200 );
           camera.position.set( -1.8, 0.9, 0.9 );
@@ -93,7 +126,7 @@
               texture.minFilter = THREE.NearestFilter;
               texture.magFilter = THREE.NearestFilter;
               texture.flipY = true;
-              var cubeGenerator = new THREE.EquirectangularToCubeGenerator( texture, { resolution: 4096 } );
+              var cubeGenerator = new THREE.EquirectangularToCubeGenerator( texture, { resolution: 2048 } );
               cubeGenerator.update( renderer );
               var pmremGenerator = new THREE.PMREMGenerator( cubeGenerator.renderTarget.texture );
               pmremGenerator.update( renderer );
