@@ -1,4 +1,5 @@
 import sys
+from os import environ
 from os import listdir
 from os.path import isdir, isfile, join
 from flask import Flask, render_template, request, send_from_directory
@@ -54,5 +55,4 @@ def send_js(path):
 
 if __name__ == "__main__":
     # Only for debugging while developing
-    # app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT'))
-    app.run(host='0.0.0.0', debug=False, port=5000)
+    app.run(host='0.0.0.0', debug=False, port=environ.get('PORT'))
