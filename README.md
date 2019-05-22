@@ -7,17 +7,17 @@ a canvas made for viewing and interacting with your glTF based objects
 
 
 # How to use:
-Method 1:
+## Method 1:
 I hosted the app on a cloud server, for easy access with the link below:
-## https://gltf-viewer.herokuapp.com/
+** https://gltf-viewer.herokuapp.com/ **
 When first accesing the link, please leave Heroku a 1/2 minute delay to 
 start the container with the app
 
-Method 2:
+##Method 2:
 Run the web server with the following command, from inside the app directory:
-## python3 main.py
+** python3 main.py **
 Acess the server locally with the link:
-## localhost:5000
+** localhost:5000 **
 
 
 # Dependencies:
